@@ -75,7 +75,7 @@
     <h1>Our baby budget</h1>
     <p class="lede">A living model of our savings balance from now through the baby's first year. Jul–Sep 2026 are actual recorded balances; everything from October on is modelled. Drag any slider and the chart at the bottom updates immediately.</p>
     <div class="chips">
-      <span class="chip">Siri $8,562/mo working</span>
+      <span class="chip">Partner $8,562/mo working</span>
       <span class="chip">Govt leave pay $2,981/mo × 6</span>
       <span class="chip">Baby due Mar 2027</span>
       <span class="chip">Actual Sep 2026 balance $85,000</span>
@@ -94,9 +94,9 @@
       <li>Jul 2026 ($72k), Aug 2026 ($77k), and Sep 2026 ($85k) are actual recorded balances, not modelled. The model projects forward from the September figure.</li>
       <li>Living costs aren't a fixed number — they're whatever's left of current income after the current mortgage and your chosen savings rate. Raising the savings slider lowers living costs by the same amount.</li>
       <li>While both incomes are coming in, the savings rate holds flat even after the move, so the larger mortgage is absorbed by trimming living costs rather than by saving less.</li>
-      <li>Once Siri starts leave, savings contributions stop entirely. That money goes to daily spending, and any shortfall draws straight from the balance.</li>
+      <li>Once partner leave starts, savings contributions stop entirely. That money goes to daily spending, and any shortfall draws straight from the balance.</li>
       <li>The car purchase and all moving/setup costs land in the same month as the house move, as one lump sum.</li>
-      <li>Siri returns to work in March 2028 regardless of when leave starts, so an earlier leave start makes the unpaid stretch longer, not the paid one.</li>
+      <li>Partner returns to work in March 2028 regardless of when leave starts, so an earlier leave start makes the unpaid stretch longer, not the paid one.</li>
       <li>Paid parental leave runs for 6 months from the leave start date, then unpaid until the return date.</li>
       <li>The mortgage rate and term are fixed for the whole period modelled — no refinancing or rate changes assumed.</li>
       <li>Agent commission and fixed selling costs come off the sale price before the deposit is calculated. "Savings used for deposit" is money taken from the cash balance and put toward the deposit, which lowers the new mortgage but also lowers the running balance in the month of the move.</li>
@@ -108,7 +108,7 @@
   </details>
 
   <section class="panel">
-    <h2>Rhys's job</h2>
+    <h2>Primary earner job</h2>
     <p class="hint">Moving the end date drags the start date with it, keeping whatever gap you've set. The new job can't start before the current one ends.</p>
     <div class="grid">
       <div class="field">
@@ -132,7 +132,7 @@
     <h2>Parental leave</h2>
     <div class="grid">
       <div class="field">
-        <label><span>Siri starts parental leave</span></label>
+        <label><span>Partner starts parental leave</span></label>
         <input type="date" id="leavestart" value="2027-01-15">
         <div class="sub" id="leavenote"></div>
       </div>
@@ -270,7 +270,7 @@
 const months = ["Jul 26","Aug 26","Sep 26","Oct 26","Nov 26","Dec 26","Jan 27","Feb 27","Mar 27","Apr 27","May 27","Jun 27","Jul 27","Aug 27","Sep 27","Oct 27","Nov 27","Dec 27","Jan 28","Feb 28","Mar 28"];
 const ACTUALS = [72000, 77000, 85000];
 const ACTUAL_N = ACTUALS.length;
-const CURRENT_INCOME = 5305, SIRI_INCOME = 8562, GOVT_PAY = 2981;
+const CURRENT_INCOME = 5305, PARTNER_INCOME = 8562, GOVT_PAY = 2981;
 const oldMortgage = 2495, loanBalance = 405000;
 const birthIdx = 8, returnIdx = 20;
 const defaults = { newjob: 5305, move: 4, sale: 615000, comm: 3.5, fixedcosts: 5000, newhouse: 950000, offset: 0, moving: 20000, car: 20000, rate: 5.59, term: 30, babycost: 20000, emergency: 10000, kit: 0, savings: 7000, injection: 0, jobend: '2026-12-01', jobstart: '2026-12-01', leavestart: '2027-01-15', injectiondate: '2026-09-23' };
@@ -342,7 +342,7 @@ function compute() {
   const gapMonths = jobStartIdx - jobEndIdx;
   document.getElementById('gapnote').textContent = gapMonths <= 0.02
     ? 'No gap between jobs.'
-    : 'Gap of about ' + gapMonths.toFixed(1) + ' months with no income from Rhys.';
+    : 'Gap of about ' + gapMonths.toFixed(1) + ' months with no income from the primary earner.';
   const unpaidLen = Math.max(0, returnIdx - paidEndIdx);
   document.getElementById('leavenote').textContent =
     'Paid to ' + idxToDateStr(paidEndIdx).slice(0,7) + ', then ' + unpaidLen.toFixed(1) + ' months unpaid.';
@@ -351,7 +351,7 @@ function compute() {
   const deposit = equity + v.offset;
   const newLoan = Math.max(v.newhouse - deposit, 0);
   const mortgage = payment(newLoan, v.rate/100, v.term);
-  const living = (CURRENT_INCOME + SIRI_INCOME - oldMortgage) - v.savings;
+  const living = (CURRENT_INCOME + PARTNER_INCOME - oldMortgage) - v.savings;
   document.getElementById('v-livingderived').textContent = fmtD(living) + '/mo';
 
   Object.assign(markers, { move: v.move, birth: birthIdx, leave: leaveIdx, paidEnd: paidEndIdx });
@@ -363,20 +363,20 @@ function compute() {
     else balance[i] = bal;
 
     const mort = i >= v.move ? mortgage : oldMortgage;
-    const rhysOld = overlap(-999, jobEndIdx, i);
-    const rhysNew = overlap(jobStartIdx, 999, i);
-    const rhysRate = CURRENT_INCOME * rhysOld + v.newjob * rhysNew;
+    const earnerOld = overlap(-999, jobEndIdx, i);
+    const earnerNew = overlap(jobStartIdx, 999, i);
+    const earnerRate = CURRENT_INCOME * earnerOld + v.newjob * earnerNew;
 
     const workFrac = overlap(-999, leaveIdx, i) + overlap(returnIdx, 999, i);
     const paidFrac = overlap(leaveIdx, paidEndIdx, i);
     const unpaidFrac = overlap(paidEndIdx, returnIdx, i);
     const leaveFrac = paidFrac + unpaidFrac;
-    const siriLeaveIncome = (GOVT_PAY + v.kit) * paidFrac + v.kit * unpaidFrac;
+    const partnerLeaveIncome = (GOVT_PAY + v.kit) * paidFrac + v.kit * unpaidFrac;
 
     const babyCost = (v.babycost / 12) * overlap(birthIdx, birthIdx + 12, i);
 
-    const netWork = (v.savings - (CURRENT_INCOME - rhysRate)) * workFrac;
-    const netLeave = rhysRate * leaveFrac + siriLeaveIncome - (mort + living) * leaveFrac;
+    const netWork = (v.savings - (CURRENT_INCOME - earnerRate)) * workFrac;
+    const netLeave = earnerRate * leaveFrac + partnerLeaveIncome - (mort + living) * leaveFrac;
     let net = netWork + netLeave - babyCost;
 
     if (i === v.move) bal -= (v.offset + v.moving + v.car);
