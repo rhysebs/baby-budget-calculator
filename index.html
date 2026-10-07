@@ -10,62 +10,226 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
-    --paper: #F6F5F0; --card: #FFFFFF; --border: #E3E0D5; --border-strong: #CFCBBC;
-    --ink: #1E2222; --ink-soft: #62675F; --ink-faint: #8B9089;
-    --teal: #1F5E5B; --teal-dark: #123B39; --teal-tint: #E4EFEE;
-    --gold: #B8912B; --gold-tint: #F7EFDC; --rust: #B2503F; --rust-tint: #F7E7E3;
+    --paper: #F6F5F0;
+    --card: #FFFFFF;
+    --border: #E3E0D5;
+    --border-strong: #CFCBBC;
+    --ink: #1E2222;
+    --ink-soft: #62675F;
+    --ink-faint: #8B9089;
+    --teal: #1F5E5B;
+    --teal-dark: #123B39;
+    --teal-tint: #E4EFEE;
+    --gold: #B8912B;
+    --gold-tint: #F7EFDC;
+    --rust: #B2503F;
+    --rust-tint: #F7E7E3;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; padding-bottom: 340px; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    padding-bottom: 4rem;
+  }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
-  header.hero { padding: 3.5rem 0 2rem; border-bottom: 1px solid var(--border); }
-  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); margin: 0 0 0.75rem; }
-  h1 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 40px; line-height: 1.15; margin: 0 0 0.75rem; color: var(--teal-dark); }
-  .lede { font-size: 16px; color: var(--ink-soft); max-width: 60ch; margin: 0 0 1.5rem; }
+  header.hero {
+    padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin: 0 0 0.75rem;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.15;
+    margin: 0 0 0.75rem;
+    color: var(--teal-dark);
+  }
+  .lede {
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 1.5rem;
+  }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip { font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: var(--teal-tint); color: var(--teal-dark); padding: 5px 12px; border-radius: 100px; }
-  .ribbon { margin: 2rem 0 0; display: grid; grid-template-columns: 8fr 6fr 6fr 8fr; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
-  .ribbon > div { padding: 10px 14px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+  .chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: var(--teal-tint);
+    color: var(--teal-dark);
+    padding: 5px 12px;
+    border-radius: 100px;
+    border: 1px solid transparent;
+  }
+  .ribbon {
+    margin: 2rem 0 0;
+    display: grid;
+    grid-template-columns: 8fr 6fr 6fr 8fr;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .ribbon > div {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
   .ribbon .ph1 { background: var(--teal-tint); color: var(--teal-dark); }
   .ribbon .ph2 { background: var(--gold-tint); color: #6b5417; }
   .ribbon .ph3 { background: #F1E4DE; color: var(--rust); }
   .ribbon .ph4 { background: var(--teal-tint); color: var(--teal-dark); }
   .ribbon .lbl { display: block; font-weight: 500; margin-bottom: 2px; }
   .ribbon .rng { display: block; opacity: 0.75; font-size: 11px; }
-  section.panel, details.panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem 2rem; margin-top: 1.5rem; }
-  section.panel h2, details.panel h2 { font-family: 'Fraunces', serif; font-weight: 500; font-size: 19px; margin: 0 0 1.25rem; color: var(--teal-dark); }
-  .hint { font-size: 12px; color: var(--ink-faint); margin: -0.75rem 0 1.5rem; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem 2rem; }
-  .field label { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; gap: 12px; }
-  .field .val { font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: var(--ink); white-space: nowrap; }
-  .field .month-val { font-family: 'IBM Plex Mono', monospace; font-weight: 500; color: var(--teal); }
-  .sub { font-size: 11px; color: var(--ink-faint); margin-top: 5px; }
-  input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; background: var(--border-strong); border-radius: 2px; outline: none; cursor: pointer; }
-  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--teal); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--teal); cursor: pointer; }
-  input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--teal); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--teal); cursor: pointer; }
-  input[type="date"], input[type="number"], select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-strong); background: #fff; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--ink); }
-  input[type="date"] { font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
-  .month-ticks { display: flex; justify-content: space-between; font-size: 10px; color: var(--ink-faint); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
-  ul.assumptions { margin: 1rem 0 0; padding-left: 1.1rem; font-size: 13.5px; color: var(--ink-soft); }
-  ul.assumptions li { margin-bottom: 6px; }
-  .assumptions-panel summary { cursor: pointer; list-style: none; }
-  .assumptions-panel summary::-webkit-details-marker { display: none; }
-  .assumptions-panel summary h2 { display: flex; align-items: center; gap: 8px; margin: 0; }
-  .assumptions-panel summary h2::before { content: '▸'; font-size: 14px; color: var(--teal); transition: transform 0.15s ease; display: inline-block; }
-  .assumptions-panel[open] summary h2::before { transform: rotate(90deg); }
-  #warning { display: none; font-size: 12px; border-radius: 8px; padding: 7px 12px; }
-  .floating-chart { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--border); box-shadow: 0 -10px 28px rgba(18,59,57,0.12); z-index: 50; padding: 0.85rem 0 1rem; }
-  .fc-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
-  .fc-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
-  .fc-metrics { display: flex; gap: 10px; flex-wrap: wrap; }
-  .fc-metric { background: var(--teal-dark); color: #fff; border-radius: 8px; padding: 5px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; display: flex; gap: 6px; align-items: baseline; }
-  .fc-metric .label { opacity: 0.7; font-family: 'Inter', sans-serif; }
-  .legend { display: flex; gap: 14px; font-size: 11px; color: var(--ink-soft); flex-wrap: wrap; }
-  .legend span.dot { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
-  .chart-wrap { position: relative; width: 100%; height: 190px; }
-  .reset-all { font-family: 'IBM Plex Mono', monospace; font-size: 12px; background: transparent; border: 1px solid var(--border-strong); color: var(--ink-soft); padding: 6px 14px; border-radius: 100px; cursor: pointer; }
+
+  section.panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin-top: 1.5rem;
+  }
+  section.panel h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    margin: 0 0 1.25rem;
+    color: var(--teal-dark);
+  }
+  .hint { font-size: 12px; color: var(--ink-faint); margin: -0.5rem 0 1.5rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem 2rem;
+  }
+  .field label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .field .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .field .month-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--teal);
+  }
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--border-strong);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--teal);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px var(--teal);
+    cursor: pointer;
+  }
+  .month-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+  .metric {
+    background: var(--teal-dark);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+  }
+  .metric .label { font-size: 12px; opacity: 0.75; margin: 0 0 6px; }
+  .metric .value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  #warning {
+    display: none;
+    font-size: 13px;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 1.5rem;
+  }
+
+  .chart-card { margin-top: 1.5rem; }
+  .legend { display: flex; gap: 20px; font-size: 12px; color: var(--ink-soft); margin-bottom: 10px; }
+  .legend span.dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .chart-wrap { position: relative; width: 100%; height: 320px; }
+  footer.note {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: 1rem;
+    line-height: 1.6;
+  }
+  .reset-all {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--ink-soft);
+    padding: 6px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+  }
   .reset-all:hover { background: var(--teal-tint); color: var(--teal-dark); border-color: var(--teal); }
-  @media (max-width: 700px) { h1 { font-size: 30px; } .ribbon { grid-template-columns: 1fr 1fr; } .chart-wrap { height: 150px; } body { padding-bottom: 300px; } }
+  @media (max-width: 600px) {
+    h1 { font-size: 30px; }
+    .ribbon { grid-template-columns: 1fr 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -73,72 +237,32 @@
   <header class="hero">
     <p class="eyebrow">Household plan — Jul 2026 to Mar 2028</p>
     <h1>Our baby budget</h1>
-    <p class="lede">A living model of our savings balance from now through the baby's first year. Jul–Sep 2026 are actual recorded balances; everything from October on is modelled. Drag any slider and the chart at the bottom updates immediately.</p>
+    <p class="lede">A living model of our savings balance from now through the baby's first year. Every number below is adjustable — drag any slider and the balance, mortgage, and chart update immediately.</p>
     <div class="chips">
-      <span class="chip">Partner $8,562/mo working</span>
+      <span class="chip">Wife $8,562/mo working</span>
       <span class="chip">Govt leave pay $2,981/mo × 6</span>
       <span class="chip">Baby due Mar 2027</span>
-      <span class="chip">Actual Sep 2026 balance $85,000</span>
+      <span class="chip">Savings today $70,000</span>
     </div>
     <div class="ribbon">
-      <div class="ph1"><span class="lbl">Both working</span><span class="rng">Jul 2026 → leave</span></div>
-      <div class="ph2"><span class="lbl">Paid leave</span><span class="rng">6 months from leave start</span></div>
-      <div class="ph3"><span class="lbl">Unpaid leave</span><span class="rng">until return</span></div>
+      <div class="ph1"><span class="lbl">Working</span><span class="rng">Jul 2026 → move</span></div>
+      <div class="ph2"><span class="lbl">Paid leave</span><span class="rng">Mar 27 → Sep 27</span></div>
+      <div class="ph3"><span class="lbl">Unpaid leave</span><span class="rng">Sep 27 → Mar 28</span></div>
       <div class="ph4"><span class="lbl">Back to work</span><span class="rng">Mar 2028</span></div>
     </div>
   </header>
 
-  <details class="panel assumptions-panel">
-    <summary><h2>Assumptions worth knowing</h2></summary>
-    <ul class="assumptions">
-      <li>Jul 2026 ($72k), Aug 2026 ($77k), and Sep 2026 ($85k) are actual recorded balances, not modelled. The model projects forward from the September figure.</li>
-      <li>Living costs aren't a fixed number — they're whatever's left of current income after the current mortgage and your chosen savings rate. Raising the savings slider lowers living costs by the same amount.</li>
-      <li>While both incomes are coming in, the savings rate holds flat even after the move, so the larger mortgage is absorbed by trimming living costs rather than by saving less.</li>
-      <li>Once partner leave starts, savings contributions stop entirely. That money goes to daily spending, and any shortfall draws straight from the balance.</li>
-      <li>The car purchase and all moving/setup costs land in the same month as the house move, as one lump sum.</li>
-      <li>Partner returns to work in March 2028 regardless of when leave starts, so an earlier leave start makes the unpaid stretch longer, not the paid one.</li>
-      <li>Paid parental leave runs for 6 months from the leave start date, then unpaid until the return date.</li>
-      <li>The mortgage rate and term are fixed for the whole period modelled — no refinancing or rate changes assumed.</li>
-      <li>Agent commission and fixed selling costs come off the sale price before the deposit is calculated. "Savings used for deposit" is money taken from the cash balance and put toward the deposit, which lowers the new mortgage but also lowers the running balance in the month of the move.</li>
-      <li>Baby's year-1 costs are spread evenly across the 12 months from birth, not front-loaded for big early purchases.</li>
-      <li>The savings balance earns no interest or investment return in this model.</li>
-      <li>Sale and purchase settle in the same month, with no bridging period or bridging finance cost.</li>
-      <li>Mid-month dates are handled proportionally — a leave start on the 15th counts roughly half that month at each income level.</li>
-    </ul>
-  </details>
-
   <section class="panel">
-    <h2>Primary earner job</h2>
-    <p class="hint">Moving the end date drags the start date with it, keeping whatever gap you've set. The new job can't start before the current one ends.</p>
+    <h2>Rhys's job</h2>
+    <p class="hint">Double-click any slider to reset it. He'll need a new job around the move to the new city.</p>
     <div class="grid">
-      <div class="field">
-        <label><span>Current job ends</span></label>
-        <input type="date" id="jobend" value="2026-12-01">
-        <div class="sub">Defaults to the month after the move.</div>
-      </div>
-      <div class="field">
-        <label><span>New job starts</span></label>
-        <input type="date" id="jobstart" value="2026-12-01">
-        <div class="sub" id="gapnote">No gap between jobs.</div>
-      </div>
       <div class="field">
         <label><span>New job monthly income</span><span class="val" id="v-newjob">$5,305</span></label>
         <input type="range" id="newjob" min="3000" max="9000" value="5305" step="50">
       </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>Parental leave</h2>
-    <div class="grid">
       <div class="field">
-        <label><span>Partner starts parental leave</span></label>
-        <input type="date" id="leavestart" value="2027-01-15">
-        <div class="sub" id="leavenote"></div>
-      </div>
-      <div class="field">
-        <label><span>Keeping-in-touch hours</span><span class="val" id="v-kit">$0/mo</span></label>
-        <input type="range" id="kit" min="0" max="599" value="0" step="1">
+        <label><span>Job search gap after move</span><span class="val" id="v-gap">1 mo</span></label>
+        <input type="range" id="gap" min="0" max="4" value="1" step="1">
       </div>
     </div>
   </section>
@@ -147,13 +271,13 @@
     <h2>House move</h2>
     <div class="grid">
       <div class="field">
-        <label><span>Month of the move</span><span class="month-val" id="v-move">Nov 2026</span></label>
-        <input type="range" id="move" min="0" max="8" value="4" step="1">
+        <label><span>Month of the move</span><span class="month-val" id="v-move">Jan 2027</span></label>
+        <input type="range" id="move" min="0" max="8" value="6" step="1">
         <div class="month-ticks"><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span></div>
       </div>
       <div class="field">
-        <label><span>House sale price</span><span class="val" id="v-sale">$615k</span></label>
-        <input type="range" id="sale" min="550000" max="700000" value="615000" step="1000">
+        <label><span>House sale price</span><span class="val" id="v-sale">$650k</span></label>
+        <input type="range" id="sale" min="600000" max="680000" value="650000" step="1000">
       </div>
       <div class="field">
         <label><span>Agent commission (% of price)</span><span class="val" id="v-comm">3.5%</span></label>
@@ -168,7 +292,7 @@
         <input type="range" id="newhouse" min="800000" max="1200000" value="950000" step="5000">
       </div>
       <div class="field">
-        <label><span>Savings used for deposit</span><span class="val" id="v-offset">$0k</span></label>
+        <label><span>Offset savings used for deposit</span><span class="val" id="v-offset">$0k</span></label>
         <input type="range" id="offset" min="0" max="70000" value="0" step="1000">
       </div>
       <div class="field">
@@ -191,37 +315,10 @@
       </div>
       <div class="field">
         <label><span>Term</span></label>
-        <select id="term"><option value="25">25 years</option><option value="30" selected>30 years</option></select>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>Savings rate</h2>
-    <p class="hint">How much goes to savings each month while both incomes are coming in. This comes out of living spending, not on top of it. Stops once leave starts.</p>
-    <div class="grid">
-      <div class="field">
-        <label><span>Monthly savings (while both working)</span><span class="val" id="v-savings">$7,000</span></label>
-        <input type="range" id="savings" min="4000" max="8000" value="7000" step="100">
-      </div>
-      <div class="field">
-        <label><span>Living costs, derived</span><span class="val" id="v-livingderived">$4,372/mo</span></label>
-        <div class="sub">Current income minus current mortgage minus the savings rate.</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>Cash injection</h2>
-    <p class="hint">A one-off lump sum landing in a single month — a gift, a bonus, a sale of something.</p>
-    <div class="grid">
-      <div class="field">
-        <label><span>Amount</span><span class="val" id="v-injection">$0</span></label>
-        <input type="range" id="injection" min="0" max="50000" value="0" step="500">
-      </div>
-      <div class="field">
-        <label><span>Date received</span></label>
-        <input type="date" id="injectiondate" value="2026-09-23">
+        <select id="term">
+          <option value="25">25 years</option>
+          <option value="30" selected>30 years</option>
+        </select>
       </div>
     </div>
   </section>
@@ -230,89 +327,72 @@
     <h2>Baby and reserves</h2>
     <div class="grid">
       <div class="field">
-        <label><span>Baby's real year-1 costs</span><span class="val" id="v-babycost">$20k</span></label>
-        <input type="range" id="babycost" min="3000" max="20000" value="20000" step="250">
+        <label><span>Baby's real year-1 costs</span><span class="val" id="v-babycost">$7k</span></label>
+        <input type="range" id="babycost" min="3000" max="20000" value="7000" step="250">
       </div>
       <div class="field">
         <label><span>Emergency floor (don't go below)</span><span class="val" id="v-emergency">$10k</span></label>
         <input type="range" id="emergency" min="5000" max="15000" value="10000" step="500">
       </div>
+      <div class="field">
+        <label><span>Wife's keeping-in-touch hours</span><span class="val" id="v-kit">$0/mo</span></label>
+        <input type="range" id="kit" min="0" max="599" value="0" step="1">
+      </div>
     </div>
   </section>
 
-  <div style="text-align: center; margin: 2rem 0 1rem;">
-    <button class="reset-all" id="reset-all">Reset all to defaults</button>
-  </div>
-</div>
+  <div id="warning"></div>
 
-<div class="floating-chart">
-  <div class="fc-inner">
-    <div id="warning"></div>
-    <div class="fc-top">
-      <div class="fc-metrics">
-        <div class="fc-metric"><span class="label">Mortgage</span><span id="m-mortgage">$0/mo</span></div>
-        <div class="fc-metric"><span class="label">Lowest point</span><span id="m-low">$0</span></div>
-        <div class="fc-metric"><span class="label">Balance Mar 2028</span><span id="m-end">$0</span></div>
-      </div>
-      <div class="legend">
-        <span><span class="dot" style="background:#1F5E5B"></span>Projected</span>
-        <span><span class="dot" style="background:#8B9089"></span>Actual</span>
-        <span><span class="dot" style="background:#B0AC9C"></span>Floor</span>
-      </div>
+  <div class="metrics">
+    <div class="metric"><p class="label">New mortgage</p><p class="value" id="m-mortgage">$4,190/mo</p></div>
+    <div class="metric"><p class="label">Lowest point</p><p class="value" id="m-low">$0</p></div>
+    <div class="metric"><p class="label">Balance at Mar 2028</p><p class="value" id="m-end">$0</p></div>
+  </div>
+
+  <section class="panel chart-card">
+    <div class="legend">
+      <span><span class="dot" style="background:#1F5E5B"></span>Household savings balance</span>
+      <span><span class="dot" style="background:#B0AC9C"></span>Emergency floor</span>
     </div>
     <div class="chart-wrap">
-      <canvas id="chart" role="img" aria-label="Line chart of household savings balance from July 2026 to March 2028, with actual balances for July to September 2026 and projections thereafter, marked with house move, baby birth, leave transitions, and return to work">Balance trajectory with a floor line at the emergency fund amount and markers for key life events.</canvas>
+      <canvas id="chart" role="img" aria-label="Line chart of household savings balance from July 2026 to March 2028, starting at 70000, marked with house move, baby birth, leave transitions, and return to work">Balance trajectory starting at $70,000, with a floor line at the emergency fund amount and markers for key life events.</canvas>
     </div>
+    <footer class="note">Fixed assumptions: $2,955/mo non-mortgage living costs, current mortgage $2,495/mo until the move, new job starts at the move date plus any search gap, keeping-in-touch income applies through both leave phases.</footer>
+  </section>
+
+  <div style="text-align: center; margin-top: 2rem;">
+    <button class="reset-all" id="reset-all">Reset all to defaults</button>
   </div>
 </div>
 
 <script>
 const months = ["Jul 26","Aug 26","Sep 26","Oct 26","Nov 26","Dec 26","Jan 27","Feb 27","Mar 27","Apr 27","May 27","Jun 27","Jul 27","Aug 27","Sep 27","Oct 27","Nov 27","Dec 27","Jan 28","Feb 28","Mar 28"];
-const ACTUALS = [72000, 77000, 85000];
-const ACTUAL_N = ACTUALS.length;
-const CURRENT_INCOME = 5305, PARTNER_INCOME = 8562, GOVT_PAY = 2981;
-const oldMortgage = 2495, loanBalance = 405000;
-const birthIdx = 8, returnIdx = 20;
-const defaults = { newjob: 5305, move: 4, sale: 615000, comm: 3.5, fixedcosts: 5000, newhouse: 950000, offset: 0, moving: 20000, car: 20000, rate: 5.59, term: 30, babycost: 20000, emergency: 10000, kit: 0, savings: 7000, injection: 0, jobend: '2026-12-01', jobstart: '2026-12-01', leavestart: '2027-01-15', injectiondate: '2026-09-23' };
-const rangeIds = ['newjob','move','sale','comm','fixedcosts','newhouse','offset','moving','car','rate','term','babycost','emergency','kit','savings','injection'];
-const dateIds = ['jobend','jobstart','leavestart','injectiondate'];
 const moveMonthNames = ["Jul 2026","Aug 2026","Sep 2026","Oct 2026","Nov 2026","Dec 2026","Jan 2027","Feb 2027","Mar 2027"];
+const babyBirth = 8, paidEnd = 14, unpaidEnd = 20;
+const necessities = 2955, oldMortgage = 2495, loanBalance = 405000, startSavings = 70000;
+const defaults = { newjob: 5305, gap: 1, move: 6, sale: 650000, comm: 3.5, fixedcosts: 5000, newhouse: 950000, offset: 0, moving: 20000, car: 20000, rate: 5.59, term: 30, babycost: 7000, emergency: 10000, kit: 0 };
 const fmtK = (v) => '$' + Math.round(v/1000) + 'k';
 const fmtD = (v) => (v < 0 ? '-$' : '$') + Math.abs(Math.round(v)).toLocaleString();
-function payment(P, annualRate, years) { const r = annualRate/12, n = years*12; return P*r/(1-Math.pow(1+r,-n)); }
-function daysInMonth(y, m) { return new Date(y, m, 0).getDate(); }
-function dateToIdx(str) {
-  if (!str) return null;
-  const [y, m, d] = str.split('-').map(Number);
-  return (y - 2026) * 12 + (m - 7) + (d - 1) / daysInMonth(y, m);
+function payment(P, annualRate, years) {
+  const r = annualRate / 12, n = years * 12;
+  return P * r / (1 - Math.pow(1 + r, -n));
 }
-function idxToDateStr(idx) {
-  const whole = Math.floor(idx);
-  const frac = idx - whole;
-  let y = 2026 + Math.floor((whole + 6) / 12);
-  let m = ((whole + 6) % 12) + 1;
-  const dim = daysInMonth(y, m);
-  const d = Math.min(dim, Math.round(frac * dim) + 1);
-  return y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
-}
-function overlap(a, b, i) { return Math.max(0, Math.min(b, i+1) - Math.max(a, i)); }
 let chart;
 const markers = {};
-let prevJobEnd = defaults.jobend;
-
+const ids = ['newjob','gap','move','sale','comm','fixedcosts','newhouse','offset','moving','car','rate','term','babycost','emergency','kit'];
 function readInputs() {
   const g = (id) => document.getElementById(id).value;
   return {
-    newjob:+g('newjob'), move:+g('move'), sale:+g('sale'), comm:+g('comm'),
-    fixedcosts:+g('fixedcosts'), newhouse:+g('newhouse'), offset:+g('offset'),
-    moving:+g('moving'), car:+g('car'), rate:+g('rate'), term:+g('term'),
-    babycost:+g('babycost'), emergency:+g('emergency'), kit:+g('kit'),
-    savings:+g('savings'), injection:+g('injection'),
-    jobend:g('jobend'), jobstart:g('jobstart'), leavestart:g('leavestart'), injectiondate:g('injectiondate')
+    newjob: +g('newjob'), gap: +g('gap'), move: +g('move'), sale: +g('sale'),
+    comm: +g('comm'), fixedcosts: +g('fixedcosts'), newhouse: +g('newhouse'),
+    offset: +g('offset'), moving: +g('moving'), car: +g('car'),
+    rate: +g('rate'), term: +g('term'), babycost: +g('babycost'), emergency: +g('emergency'),
+    kit: +g('kit')
   };
 }
 function updateLabels(v) {
   document.getElementById('v-newjob').textContent = fmtD(v.newjob);
+  document.getElementById('v-gap').textContent = v.gap + ' mo';
   document.getElementById('v-move').textContent = moveMonthNames[v.move];
   document.getElementById('v-sale').textContent = fmtK(v.sale);
   document.getElementById('v-comm').textContent = v.comm.toFixed(1) + '%';
@@ -325,157 +405,122 @@ function updateLabels(v) {
   document.getElementById('v-babycost').textContent = fmtK(v.babycost);
   document.getElementById('v-emergency').textContent = fmtK(v.emergency);
   document.getElementById('v-kit').textContent = '$' + v.kit + '/mo';
-  document.getElementById('v-savings').textContent = fmtD(v.savings);
-  document.getElementById('v-injection').textContent = fmtD(v.injection);
 }
-
+function rhysIncome(i, v) {
+  if (i < v.move) return 5305;
+  const since = i - v.move;
+  return since < v.gap ? 0 : v.newjob;
+}
 function compute() {
   const v = readInputs();
   updateLabels(v);
-
-  const jobEndIdx = dateToIdx(v.jobend);
-  const jobStartIdx = dateToIdx(v.jobstart);
-  const leaveIdx = dateToIdx(v.leavestart);
-  const injIdx = dateToIdx(v.injectiondate);
-  const paidEndIdx = Math.min(leaveIdx + 6, returnIdx);
-
-  const gapMonths = jobStartIdx - jobEndIdx;
-  document.getElementById('gapnote').textContent = gapMonths <= 0.02
-    ? 'No gap between jobs.'
-    : 'Gap of about ' + gapMonths.toFixed(1) + ' months with no income from the primary earner.';
-  const unpaidLen = Math.max(0, returnIdx - paidEndIdx);
-  document.getElementById('leavenote').textContent =
-    'Paid to ' + idxToDateStr(paidEndIdx).slice(0,7) + ', then ' + unpaidLen.toFixed(1) + ' months unpaid.';
-
-  const equity = v.sale * (1 - v.comm/100) - v.fixedcosts - loanBalance;
+  const equity = v.sale * (1 - v.comm / 100) - v.fixedcosts - loanBalance;
   const deposit = equity + v.offset;
   const newLoan = Math.max(v.newhouse - deposit, 0);
-  const mortgage = payment(newLoan, v.rate/100, v.term);
-  const living = (CURRENT_INCOME + PARTNER_INCOME - oldMortgage) - v.savings;
-  document.getElementById('v-livingderived').textContent = fmtD(living) + '/mo';
-
-  Object.assign(markers, { move: v.move, birth: birthIdx, leave: leaveIdx, paidEnd: paidEndIdx });
-
+  const mortgage = payment(newLoan, v.rate / 100, v.term);
+  Object.assign(markers, { move: v.move, babyBirth, paidEnd, unpaidEnd });
   const balance = new Array(months.length).fill(0);
-  let bal = ACTUALS[ACTUAL_N - 1];
+  let bal = startSavings;
   for (let i = 0; i < months.length; i++) {
-    if (i < ACTUAL_N) { balance[i] = ACTUALS[i]; if (i < ACTUAL_N - 1) continue; }
-    else balance[i] = bal;
-
     const mort = i >= v.move ? mortgage : oldMortgage;
-    const earnerOld = overlap(-999, jobEndIdx, i);
-    const earnerNew = overlap(jobStartIdx, 999, i);
-    const earnerRate = CURRENT_INCOME * earnerOld + v.newjob * earnerNew;
-
-    const workFrac = overlap(-999, leaveIdx, i) + overlap(returnIdx, 999, i);
-    const paidFrac = overlap(leaveIdx, paidEndIdx, i);
-    const unpaidFrac = overlap(paidEndIdx, returnIdx, i);
-    const leaveFrac = paidFrac + unpaidFrac;
-    const partnerLeaveIncome = (GOVT_PAY + v.kit) * paidFrac + v.kit * unpaidFrac;
-
-    const babyCost = (v.babycost / 12) * overlap(birthIdx, birthIdx + 12, i);
-
-    const netWork = (v.savings - (CURRENT_INCOME - earnerRate)) * workFrac;
-    const netLeave = earnerRate * leaveFrac + partnerLeaveIncome - (mort + living) * leaveFrac;
-    let net = netWork + netLeave - babyCost;
-
+    let wifeIncome;
+    if (i < babyBirth) wifeIncome = 8562;
+    else if (i < paidEnd) wifeIncome = 2981 + v.kit;
+    else if (i < unpaidEnd) wifeIncome = v.kit;
+    else wifeIncome = 8562;
+    const income = rhysIncome(i, v) + wifeIncome;
+    const babyCost = (i >= babyBirth && i < unpaidEnd) ? v.babycost / 12 : 0;
+    const net = income - necessities - mort - babyCost;
     if (i === v.move) bal -= (v.offset + v.moving + v.car);
-    if (injIdx !== null && injIdx >= i && injIdx < i + 1) bal += v.injection;
     bal += net;
+    balance[i] = bal;
   }
-
   document.getElementById('m-mortgage').textContent = fmtD(mortgage) + '/mo';
   let minVal = Infinity, minIdx = 0;
   balance.forEach((b, i) => { if (b < minVal) { minVal = b; minIdx = i; } });
   document.getElementById('m-low').textContent = fmtD(minVal) + ' (' + months[minIdx] + ')';
-  document.getElementById('m-end').textContent = fmtD(balance[returnIdx]);
-
+  document.getElementById('m-end').textContent = fmtD(balance[unpaidEnd]);
   const warnEl = document.getElementById('warning');
   if (minVal < 0) {
-    warnEl.style.display = 'block'; warnEl.style.background = '#F7E7E3'; warnEl.style.color = '#B2503F';
-    warnEl.textContent = 'Balance goes negative around ' + months[minIdx] + ' — that implies borrowing.';
+    warnEl.style.display = 'block';
+    warnEl.style.background = '#F7E7E3';
+    warnEl.style.color = '#B2503F';
+    warnEl.textContent = 'Balance goes negative around ' + months[minIdx] + ' at these settings — that implies borrowing, not just a thin buffer.';
   } else if (minVal < v.emergency) {
-    warnEl.style.display = 'block'; warnEl.style.background = '#F7EFDC'; warnEl.style.color = '#6b5417';
+    warnEl.style.display = 'block';
+    warnEl.style.background = '#F7EFDC';
+    warnEl.style.color = '#6b5417';
     warnEl.textContent = 'Balance dips below the emergency floor around ' + months[minIdx] + '.';
-  } else { warnEl.style.display = 'none'; }
-
+  } else {
+    warnEl.style.display = 'none';
+  }
   const floor = v.emergency;
-  const pointColors = balance.map((b, i) => i < ACTUAL_N ? '#8B9089' : (b < floor ? '#B2503F' : '#1F5E5B'));
-
+  const pointColors = balance.map((b) => b < floor ? '#B2503F' : '#1F5E5B');
   if (chart) {
     chart.data.datasets[0].data = balance;
     chart.data.datasets[0].pointBackgroundColor = pointColors;
     chart.data.datasets[1].data = months.map(() => floor);
     chart.update();
   } else {
-    const phaseLines = { id:'phaseLines', afterDraw(c) {
-      const { ctx, chartArea, scales } = c; const x = scales.x;
-      const items = [
-        { idx: markers.move, label: 'Move' },
-        { idx: markers.leave, label: 'Leave' },
-        { idx: markers.birth, label: 'Baby' },
-        { idx: markers.paidEnd, label: 'Unpaid' },
-        { idx: returnIdx, label: 'Back' }
-      ];
-      ctx.save();
-      items.forEach((it) => {
-        if (it.idx == null || it.idx < 0 || it.idx > months.length - 1) return;
-        const px = x.getPixelForValue(Math.floor(it.idx)) + (it.idx % 1) * ((x.getPixelForValue(1) - x.getPixelForValue(0)) || 0);
-        ctx.strokeStyle = '#CFCBBC'; ctx.setLineDash([3,3]); ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(px, chartArea.top); ctx.lineTo(px, chartArea.bottom); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = '#62675F'; ctx.font = '9px IBM Plex Mono, monospace'; ctx.textAlign = 'center';
-        ctx.fillText(it.label, px, chartArea.top - 4);
-      });
-      ctx.restore();
-    }};
+    const phaseLines = {
+      id: 'phaseLines',
+      afterDraw(c) {
+        const { ctx, chartArea, scales } = c;
+        const x = scales.x;
+        const items = [
+          { idx: markers.move, label: 'Move' },
+          { idx: markers.babyBirth, label: 'Baby born' },
+          { idx: markers.paidEnd, label: 'Unpaid starts' },
+          { idx: markers.unpaidEnd, label: 'Back to work' }
+        ];
+        ctx.save();
+        items.forEach((it) => {
+          const px = x.getPixelForValue(it.idx);
+          ctx.strokeStyle = '#CFCBBC';
+          ctx.setLineDash([3, 3]);
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, chartArea.top);
+          ctx.lineTo(px, chartArea.bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#62675F';
+          ctx.font = '10px IBM Plex Mono, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(it.label, px, chartArea.top - 4);
+        });
+        ctx.restore();
+      }
+    };
     chart = new Chart(document.getElementById('chart'), {
       type: 'line',
-      data: { labels: months, datasets: [
-        { data: balance, borderColor:'#1F5E5B', backgroundColor:'rgba(31,94,91,0.08)', fill:true, cubicInterpolationMode:'monotone', tension:0.3, pointRadius:2.5, pointBackgroundColor:pointColors, borderWidth:2 },
-        { data: months.map(() => floor), borderColor:'#B0AC9C', borderDash:[4,4], pointRadius:0, fill:false }
-      ]},
+      data: {
+        labels: months,
+        datasets: [
+          { data: balance, borderColor: '#1F5E5B', backgroundColor: 'rgba(31,94,91,0.08)', fill: true, tension: 0.25, pointRadius: 3, pointBackgroundColor: pointColors, borderWidth: 2 },
+          { data: months.map(() => floor), borderColor: '#B0AC9C', borderDash: [4, 4], pointRadius: 0, fill: false }
+        ]
+      },
       options: {
-        responsive:true, maintainAspectRatio:false, layout:{ padding:{ top:18 } },
-        plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=>fmtD(c.parsed.y) } } },
-        scales:{
-          y:{ ticks:{ callback:(val)=>fmtK(val), color:'#8B9089', font:{ size:10, family:'IBM Plex Mono' } }, grid:{ color:'#EFEDE5' } },
-          x:{ ticks:{ autoSkip:false, maxRotation:60, color:'#8B9089', font:{ size:9, family:'IBM Plex Mono' } }, grid:{ display:false } }
+        responsive: true, maintainAspectRatio: false,
+        layout: { padding: { top: 18 } },
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => fmtD(c.parsed.y) } } },
+        scales: {
+          y: { ticks: { callback: (v) => fmtK(v), color: '#8B9089', font: { family: 'IBM Plex Mono' } }, grid: { color: '#EFEDE5' } },
+          x: { ticks: { autoSkip: false, maxRotation: 60, color: '#8B9089', font: { size: 10, family: 'IBM Plex Mono' } }, grid: { display: false } }
         }
       },
-      plugins:[phaseLines]
+      plugins: [phaseLines]
     });
   }
 }
-
-rangeIds.forEach((id) => {
+ids.forEach((id) => {
   const el = document.getElementById(id);
   el.addEventListener('input', compute);
   el.addEventListener('dblclick', () => { el.value = defaults[id]; compute(); });
 });
-dateIds.forEach((id) => {
-  const el = document.getElementById(id);
-  el.addEventListener('change', () => {
-    if (id === 'jobend') {
-      const startEl = document.getElementById('jobstart');
-      const prevIdx = dateToIdx(prevJobEnd);
-      const newIdx = dateToIdx(el.value);
-      const curStart = dateToIdx(startEl.value);
-      const keptGap = Math.max(0, curStart - prevIdx);
-      startEl.value = idxToDateStr(newIdx + keptGap);
-      prevJobEnd = el.value;
-    }
-    if (id === 'jobstart') {
-      const endIdx = dateToIdx(document.getElementById('jobend').value);
-      if (dateToIdx(el.value) < endIdx) el.value = document.getElementById('jobend').value;
-    }
-    compute();
-  });
-  el.addEventListener('dblclick', () => { el.value = defaults[id]; if (id==='jobend') prevJobEnd = defaults[id]; compute(); });
-});
 document.getElementById('reset-all').addEventListener('click', () => {
-  rangeIds.concat(dateIds).forEach((id) => { document.getElementById(id).value = defaults[id]; });
-  prevJobEnd = defaults.jobend;
+  ids.forEach((id) => { document.getElementById(id).value = defaults[id]; });
   compute();
 });
 compute();
